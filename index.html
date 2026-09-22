@@ -5,990 +5,180 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fairmont High Library | Digital Catalog</title>
 
-  <!-- Google Fonts: Source Serif 4 for headlines/spines, Inter for clear UI readability -->
+  <!-- Google Fonts: Source Serif 4 & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    /* ---------- 1. SCHOOL-BRANDED THEME TOKENS ---------- */
-    :root {
-      /* Brand colors — "reading room" navy & brass */
-      --color-primary: #1B2A41;       /* deep navy — header, primary buttons  */
-      --color-primary-light: #2E4763;
-      --color-secondary: #B8862E;     /* brass/gold — secondary accents       */
-      --color-secondary-light: #D3A75A;
-
-      /* Status colors */
-      --color-available: #2E6B47;     /* shelf green  */
-      --color-available-bg: #E3F0E9;
-      --color-borrowed: #AC3E27;      /* rust red     */
-      --color-borrowed-bg: #F8E8E5;
-
-      /* Neutrals */
-      --color-bg: #EFECE6;            /* page background, warm paper grey */
-      --color-surface: #FAF8F5;       /* card background                  */
-      --color-ink: #1C1A17;           /* primary text                     */
-      --color-ink-soft: #5C584E;      /* secondary text                   */
-      --color-border: #D8D2C5;
-
-      /* Typography */
-      --font-display: "Source Serif 4", Georgia, serif;
-      --font-body: "Inter", system-ui, -apple-system, sans-serif;
-
-      /* Spacing / shape / shadows */
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 16px;
-      --shadow-card: 0 2px 4px rgba(27, 42, 65, 0.05), 0 8px 18px rgba(27, 42, 65, 0.08);
-      --shadow-card-hover: 0 6px 14px rgba(27, 42, 65, 0.12), 0 18px 32px rgba(27, 42, 65, 0.16);
-      --transition: 200ms ease;
-    }
-
-    /* ---------- 2. RESET & BASE BOX MODEL ---------- */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: var(--font-body);
-      background-color: var(--color-bg);
-      color: var(--color-ink);
-      line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    h1, h2, h3, h4 {
-      font-family: var(--font-display);
-      margin: 0;
-      color: var(--color-primary);
-      line-height: 1.25;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* Accessible focus state for keyboard navigation */
-    a:focus-visible,
-    button:focus-visible,
-    input:focus-visible {
-      outline: 2px solid var(--color-secondary);
-      outline-offset: 2px;
-    }
-
-    /* ---------- 3. HEADER (Flexbox) ---------- */
-    .site-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.25rem;
-      background: var(--color-primary);
-      color: #F4F1E8;
-      padding: 1.25rem 2rem;
-      border-bottom: 4px solid var(--color-secondary);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .brand-mark {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border: 2px solid var(--color-secondary);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--color-secondary-light);
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .brand-eyebrow {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #D1C9B6;
-      margin-bottom: 0.1rem;
-    }
-
-    .brand-text h1 {
-      color: #FBF9F4;
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .site-nav ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .nav-link {
-      display: inline-block;
-      padding: 0.55rem 1rem;
-      border-radius: var(--radius-sm);
-      border: 1px solid transparent;
-      font-size: 0.92rem;
-      font-weight: 500;
-      color: #E2DDD0;
-      transition: background var(--transition), border-color var(--transition), color var(--transition);
-    }
-
-    .nav-link:hover {
-      background: rgba(251, 249, 244, 0.1);
-      border-color: rgba(251, 249, 244, 0.25);
-      color: #FFFFFF;
-    }
-
-    .nav-link.is-active {
-      background: var(--color-secondary);
-      color: var(--color-primary);
-      font-weight: 700;
-    }
-
-    /* ---------- 4. PAGE SHELL (Flexbox) ---------- */
-    .page-shell {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 2rem;
-      max-width: 1280px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 2rem;
-      flex: 1;
-    }
-
-    /* ---------- 5. ASIDE / FILTERS ---------- */
-    .filters {
-      flex: 1 1 240px;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-      box-shadow: var(--shadow-card);
-    }
-
-    .filter-group-title {
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-      border-bottom: 2px solid var(--color-bg);
-      padding-bottom: 0.4rem;
-    }
-
-    .search-box {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      background: #FFFFFF;
-      color: var(--color-ink);
-      transition: border-color var(--transition), box-shadow var(--transition);
-    }
-
-    .search-input:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(27, 42, 65, 0.1);
-      outline: none;
-    }
-
-    .filter-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .filter-chip {
-      width: 100%;
-      text-align: left;
-      padding: 0.6rem 0.9rem;
-      background: transparent;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--color-ink-soft);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background var(--transition), border-color var(--transition), transform var(--transition), color var(--transition);
-    }
-
-    .filter-chip:hover {
-      border-color: var(--color-primary);
-      color: var(--color-primary);
-      transform: translateX(3px);
-      background: rgba(27, 42, 65, 0.03);
-    }
-
-    .filter-chip.is-active {
-      background: var(--color-primary);
-      border-color: var(--color-primary);
-      color: #FBF9F4;
-      font-weight: 600;
-    }
-
-    .filter-count {
-      font-size: 0.75rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.08);
-    }
-
-    .filter-chip.is-active .filter-count {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .status-key {
-      border-top: 1px solid var(--color-border);
-      padding-top: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      font-size: 0.88rem;
-      color: var(--color-ink-soft);
-    }
-
-    .status-key-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    /* ---------- 6. MAIN / CATALOG LAYOUT ---------- */
-    .catalog {
-      flex: 3 1 640px;
-    }
-
-    .catalog-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid var(--color-border);
-      padding-bottom: 0.75rem;
-    }
-
-    .catalog-subtitle {
-      color: var(--color-ink-soft);
-      font-size: 0.95rem;
-    }
-
-    /* Mandatory Flexbox layout with flex-wrap: wrap */
-    .book-grid {
-      display: flex;
-      flex-flow: row wrap;
-      gap: 1.5rem;
-      align-items: stretch;
-      justify-content: flex-start;
-    }
-
-    .empty-state {
-      width: 100%;
-      padding: 3rem 1.5rem;
-      text-align: center;
-      background: var(--color-surface);
-      border: 1px dashed var(--color-border);
-      border-radius: var(--radius-md);
-      color: var(--color-ink-soft);
-    }
-
-    /* ---------- 7. BOOK CARD (<article>) ---------- */
-    .book-card {
-      flex: 1 1 260px;
-      max-width: 310px;
-      display: flex;
-      flex-direction: column;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      box-shadow: var(--shadow-card);
-      position: relative;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-    }
-
-    .book-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-card-hover);
-      border-color: var(--color-secondary-light);
-    }
-
-    /* Simulated book cover thumbnail */
-    .book-cover {
-      height: 150px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 1.1rem;
-      background: linear-gradient(145deg, var(--cover-a, #1B2A41), var(--cover-b, #2E4763));
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 0.85rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    }
-
-    .book-cover::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.05) 0px,
-        rgba(255, 255, 255, 0.05) 2px,
-        transparent 2px,
-        transparent 16px
-      );
-    }
-
-    .cover-category-tag {
-      align-self: flex-end;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.85);
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      backdrop-filter: blur(4px);
-    }
-
-    .cover-spine {
-      position: relative;
-      font-family: var(--font-display);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #FFFFFF;
-      border-left: 3px solid var(--color-secondary-light);
-      padding-left: 0.5rem;
-      line-height: 1.2;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-    }
-
-    .book-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      flex-grow: 1;
-      margin-bottom: 1.1rem;
-    }
-
-    .book-title {
-      font-size: 1.1rem;
-      line-height: 1.3;
-      margin-top: 0.25rem;
-    }
-
-    .book-author {
-      color: var(--color-ink-soft);
-      font-size: 0.9rem;
-      font-style: italic;
-    }
-
-    .book-meta {
-      color: var(--color-ink-soft);
-      font-size: 0.8rem;
-      margin-top: auto;
-      padding-top: 0.5rem;
-    }
-
-    /* Badges */
-    .badge {
-      display: inline-block;
-      align-self: flex-start;
-      padding: 0.25rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .badge--available {
-      background: var(--color-available-bg);
-      color: var(--color-available);
-      border: 1px solid rgba(46, 107, 71, 0.2);
-    }
-
-    .badge--borrowed {
-      background: var(--color-borrowed-bg);
-      color: var(--color-borrowed);
-      border: 1px solid rgba(172, 62, 39, 0.2);
-    }
-
-    /* Buttons */
-    .book-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .btn {
-      flex: 1 1 auto;
-      padding: 0.6rem 0.9rem;
-      border-radius: var(--radius-sm);
-      border: 1px solid transparent;
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      transition: background var(--transition), color var(--transition), transform var(--transition), border-color var(--transition), box-shadow var(--transition);
-    }
-
-    .btn:active {
-      transform: translateY(1px);
-    }
-
-    .btn--primary {
-      background: var(--color-primary);
-      color: #FBF9F4;
-    }
-
-    .btn--primary:hover {
-      background: var(--color-primary-light);
-      box-shadow: 0 3px 8px rgba(27, 42, 65, 0.2);
-    }
-
-    .btn--secondary {
-      background: var(--color-secondary);
-      color: var(--color-primary);
-    }
-
-    .btn--secondary:hover {
-      background: var(--color-secondary-light);
-      box-shadow: 0 3px 8px rgba(184, 134, 46, 0.25);
-    }
-
-    .btn--ghost {
-      background: transparent;
-      border-color: var(--color-border);
-      color: var(--color-ink-soft);
-    }
-
-    .btn--ghost:hover {
-      border-color: var(--color-primary);
-      color: var(--color-primary);
-      background: rgba(27, 42, 65, 0.04);
-    }
-
-    /* ---------- 8. FOOTER ---------- */
-    .site-footer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.75rem 2rem;
-      border-top: 1px solid var(--color-border);
-      background: var(--color-surface);
-      color: var(--color-ink-soft);
-      font-size: 0.85rem;
-      margin-top: auto;
-    }
-
-    .footer-content {
-      max-width: 1280px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-
-    /* ---------- 9. INTERACTIVE MODAL & TOAST NOTIFICATION ---------- */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(27, 42, 65, 0.6);
-      backdrop-filter: blur(3px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 250ms ease;
-    }
-
-    .modal-overlay.is-visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      max-width: 520px;
-      width: 100%;
-      padding: 1.75rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      transform: translateY(15px);
-      transition: transform 250ms ease;
-    }
-
-    .modal-overlay.is-visible .modal-card {
-      transform: translateY(0);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .modal-close-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--color-ink-soft);
-      line-height: 1;
-      padding: 0.2rem;
-    }
-
-    .toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      z-index: 200;
-    }
-
-    .toast {
-      background: var(--color-primary);
-      color: #FFFFFF;
-      padding: 0.85rem 1.25rem;
-      border-radius: var(--radius-sm);
-      border-left: 4px solid var(--color-secondary);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      animation: slideIn 300ms ease forwards;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    /* ---------- 10. RESPONSIVE BREAKPOINTS ---------- */
-    @media (max-width: 768px) {
-      .site-header {
-        padding: 1rem;
-      }
-
-      .page-shell {
-        padding: 1rem;
-        gap: 1.25rem;
-      }
-
-      .book-card {
-        max-width: 100%;
-      }
-
-      .toast-container {
-        left: 1rem;
-        right: 1rem;
-        bottom: 1rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        animation: none !important;
-      }
-    }
-  </style>
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
+  <!-- ============ HEADER (Semantic HTML5) ============ -->
   <header class="site-header">
     <div class="brand">
       <span class="brand-mark" aria-hidden="true">FH</span>
       <div class="brand-text">
-        <p class="brand-eyebrow">Fairmont High School</p>
-        <h1>Digital Library Catalog</h1>
+        <p class="brand-eyebrow">Fairmont High Library</p>
+        <h1>Digital Catalog</h1>
       </div>
     </div>
 
-    <nav class="site-nav" aria-label="Primary Navigation">
+    <!-- Semantic Navigation -->
+    <nav class="site-nav" aria-label="Primary">
       <ul>
         <li><a href="#catalog" class="nav-link is-active">Catalog</a></li>
-        <li><a href="#" class="nav-link" onclick="showToast('Feature notice', 'Hold requests can be viewed at the front desk.'); return false;">My Holds</a></li>
-        <li><a href="#" class="nav-link" onclick="showToast('Library policy', 'Books can be returned via the drop box 24/7.'); return false;">Return Desk</a></li>
+        <li><a href="#" class="nav-link">My Holds</a></li>
+        <li><a href="#" class="nav-link">Return a Book</a></li>
+        <li><a href="#" class="nav-link">Help</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- ============ PAGE SHELL ============ -->
+  <!-- Page Shell (Flexbox Side-by-Side Layout) -->
   <div class="page-shell">
 
-    <!-- ============ ASIDE / SIDEBAR ============ -->
-    <aside class="filters" aria-label="Catalog Filters">
-      <div class="search-box">
-        <h2 class="filter-group-title">Find Title</h2>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search title or author..." aria-label="Search books by title or author">
-      </div>
-
+    <!-- ============ ASIDE (Sidebar & Filters) ============ -->
+    <aside class="filters" aria-label="Browse the catalog">
       <div>
-        <h2 class="filter-group-title">Browse by Shelf</h2>
-        <ul class="filter-list" id="categoryFilterList">
-          <li><button type="button" class="filter-chip is-active" data-category="All"><span>All Categories</span> <span class="filter-count" id="countAll">0</span></button></li>
-          <li><button type="button" class="filter-chip" data-category="Fiction"><span>Fiction</span> <span class="filter-count" id="countFiction">0</span></button></li>
-          <li><button type="button" class="filter-chip" data-category="Science"><span>Science</span> <span class="filter-count" id="countScience">0</span></button></li>
-          <li><button type="button" class="filter-chip" data-category="History"><span>History</span> <span class="filter-count" id="countHistory">0</span></button></li>
-          <li><button type="button" class="filter-chip" data-category="Poetry"><span>Poetry</span> <span class="filter-count" id="countPoetry">0</span></button></li>
+        <h2 class="filters-title">Browse by Shelf</h2>
+        <ul class="filter-list">
+          <li><button type="button" class="filter-chip is-active">All Books</button></li>
+          <li><button type="button" class="filter-chip">Fiction</button></li>
+          <li><button type="button" class="filter-chip">Science</button></li>
+          <li><button type="button" class="filter-chip">History</button></li>
+          <li><button type="button" class="filter-chip">Poetry</button></li>
         </ul>
       </div>
 
       <div class="status-key">
-        <h2 class="filter-group-title">Status Key</h2>
-        <div class="status-key-item">
-          <span class="badge badge--available">Available</span>
-          <span>On shelf for immediate checkout</span>
-        </div>
-        <div class="status-key-item">
-          <span class="badge badge--borrowed">Borrowed</span>
-          <span>Checked out / Reserve for next</span>
-        </div>
+        <h2 class="filters-title">Status Key</h2>
+        <p><span class="badge badge--available">Available</span> On the shelf</p>
+        <p><span class="badge badge--borrowed">Borrowed</span> Checked out</p>
       </div>
     </aside>
 
-    <!-- ============ MAIN CATALOG ============ -->
+    <!-- ============ MAIN (Primary Catalog Grid) ============ -->
     <main id="catalog" class="catalog">
-      <div class="catalog-header">
-        <div>
-          <h2>Circulation Desk</h2>
-          <p class="catalog-subtitle" id="catalogStatusText">Loading catalog holdings...</p>
-        </div>
+      <div class="catalog-heading">
+        <h2>Circulation Desk</h2>
+        <p>42 titles on record &middot; updated this morning</p>
       </div>
 
-      <!-- Mandatory Flexbox card container with flex-wrap -->
-      <div class="book-grid" id="bookGrid">
-        <!-- Book cards dynamically rendered via JS to enable full interactivity -->
+      <!-- Core Requirement: Flexbox container with flex-wrap -->
+      <div class="book-grid">
+
+        <!-- Book Card 1 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#1B2A41; --cover-b:#2E4763;">
+            <span class="cover-spine">Novel</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--available">Available</span>
+            <h3 class="book-title">The Quiet Orbit</h3>
+            <p class="book-author">by Maren Ashcroft</p>
+            <p class="book-meta">Fiction &middot; Call No. FIC ASH</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--primary">Borrow</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
+        <!-- Book Card 2 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#5C3A21; --cover-b:#7A5233;">
+            <span class="cover-spine">History</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--borrowed">Borrowed</span>
+            <h3 class="book-title">Empires of Salt</h3>
+            <p class="book-author">by Devon Okafor</p>
+            <p class="book-meta">History &middot; Call No. 909 OKA</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--secondary">Reserve</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
+        <!-- Book Card 3 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#3B6E52; --cover-b:#528A6C;">
+            <span class="cover-spine">Science</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--available">Available</span>
+            <h3 class="book-title">A Field Guide to Tiny Storms</h3>
+            <p class="book-author">by Priya Ramanathan</p>
+            <p class="book-meta">Science &middot; Call No. 551 RAM</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--primary">Borrow</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
+        <!-- Book Card 4 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#B5533C; --cover-b:#C97455;">
+            <span class="cover-spine">Poetry</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--borrowed">Borrowed</span>
+            <h3 class="book-title">Small Weather</h3>
+            <p class="book-author">by Ines Callahan</p>
+            <p class="book-meta">Poetry &middot; Call No. 811 CAL</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--secondary">Reserve</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
+        <!-- Book Card 5 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#1B2A41; --cover-b:#2E4763;">
+            <span class="cover-spine">Novel</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--available">Available</span>
+            <h3 class="book-title">The Cartographer's Daughter</h3>
+            <p class="book-author">by Yusuf Bello</p>
+            <p class="book-meta">Fiction &middot; Call No. FIC BEL</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--primary">Borrow</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
+        <!-- Book Card 6 -->
+        <article class="book-card">
+          <div class="book-cover" style="--cover-a:#5C3A21; --cover-b:#7A5233;">
+            <span class="cover-spine">History</span>
+          </div>
+          <div class="book-body">
+            <span class="badge badge--available">Available</span>
+            <h3 class="book-title">The Long Ledger</h3>
+            <p class="book-author">by Clara Voss</p>
+            <p class="book-meta">History &middot; Call No. 973 VOS</p>
+          </div>
+          <div class="book-actions">
+            <button type="button" class="btn btn--primary">Borrow</button>
+            <button type="button" class="btn btn--ghost">Details</button>
+          </div>
+        </article>
+
       </div>
     </main>
   </div>
 
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
-    <div class="footer-content">
-      <p>Fairmont High School Library &middot; Open Mon&ndash;Fri, 7:30 AM &ndash; 4:30 PM</p>
-      <p>&copy; 2026 Fairmont High School Media Center &middot; Group 2 Project</p>
-    </div>
+    <p>Fairmont High Library &middot; Open Mon&ndash;Fri, 7:30am&ndash;5:00pm</p>
+    <p>&copy; 2026 Fairmont High School Library Media Center</p>
   </footer>
 
-  <!-- ============ DETAIL MODAL ============ -->
-  <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="modalTitle">Book Details</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal()" aria-label="Close modal">&times;</button>
-      </div>
-      <div>
-        <span class="badge" id="modalBadge">Status</span>
-      </div>
-      <p><strong>Author:</strong> <span id="modalAuthor"></span></p>
-      <p><strong>Category:</strong> <span id="modalCategory"></span></p>
-      <p><strong>Call Number:</strong> <span id="modalCallNo"></span></p>
-      <p style="margin-top: 0.5rem; color: var(--color-ink-soft);" id="modalDescription"></p>
-      <div style="margin-top: 1rem; display: flex; justify-content: flex-end; gap: 0.5rem;" id="modalActions">
-        <!-- Dynamic modal action button -->
-      </div>
-    </div>
-  </div>
-
-  <div class="toast-container" id="toastContainer"></div>
-
-  <script>
-    // Initial catalog datasets matching assignment themes
-    const initialBooks = [
-      {
-        id: "bk-101",
-        title: "The Quiet Orbit",
-        author: "Maren Ashcroft",
-        category: "Fiction",
-        callNo: "FIC ASH",
-        status: "available",
-        description: "A compelling science fiction story exploring deep space station routines and human connections in isolation.",
-        gradient: ["#1B2A41", "#2E4763"]
-      },
-      {
-        id: "bk-102",
-        title: "Empires of Salt",
-        author: "Devon Okafor",
-        category: "History",
-        callNo: "909 OKA",
-        status: "borrowed",
-        description: "An in-depth historical analysis of ancient trade routes and the global impact of salt commerce across civilizations.",
-        gradient: ["#5C3A21", "#7A5233"]
-      },
-      {
-        id: "bk-103",
-        title: "A Field Guide to Tiny Storms",
-        author: "Priya Ramanathan",
-        category: "Science",
-        callNo: "551 RAM",
-        status: "available",
-        description: "An accessible breakdown of atmospheric thermodynamics, localized weather phenomena, and cloud formation science.",
-        gradient: ["#2E6B47", "#448E63"]
-      },
-      {
-        id: "bk-104",
-        title: "Small Weather",
-        author: "Ines Callahan",
-        category: "Poetry",
-        callNo: "811 CAL",
-        status: "borrowed",
-        description: "An award-winning collection of contemporary free-verse poems contemplating seasonal changes and personal memory.",
-        gradient: ["#AC3E27", "#C95E47"]
-      },
-      {
-        id: "bk-105",
-        title: "The Cartographer's Daughter",
-        author: "Yusuf Bello",
-        category: "Fiction",
-        callNo: "FIC BEL",
-        status: "available",
-        description: "A historical mystery centered around undisclosed 17th-century naval maps and hidden archipelagos.",
-        gradient: ["#1B2A41", "#3B5274"]
-      },
-      {
-        id: "bk-106",
-        title: "The Long Ledger",
-        author: "Clara Voss",
-        category: "History",
-        callNo: "973 VOS",
-        status: "available",
-        description: "A study of early industrial economics, examining community archives and early public infrastructure development.",
-        gradient: ["#5C3A21", "#8C6141"]
-      }
-    ];
-
-    let books = [...initialBooks];
-    let selectedCategory = "All";
-    let searchQuery = "";
-
-    // Render catalog items to DOM
-    function renderCatalog() {
-      const grid = document.getElementById('bookGrid');
-      grid.innerHTML = '';
-
-      // Filter logic
-      const filtered = books.filter(book => {
-        const matchesCategory = selectedCategory === "All" || book.category === selectedCategory;
-        const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              book.author.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-      });
-
-      // Update subtitle count text
-      document.getElementById('catalogStatusText').textContent = 
-        `Showing ${filtered.length} of ${books.length} titles on record`;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <h3>No books found</h3>
-            <p>Try adjusting your search terms or selecting a different category shelf.</p>
-          </div>
-        `;
-        return;
-      }
-
-      filtered.forEach(book => {
-        const article = document.createElement('article');
-        article.className = 'book-card';
-        article.innerHTML = `
-          <div class="book-cover" style="--cover-a: ${book.gradient[0]}; --cover-b: ${book.gradient[1]};">
-            <span class="cover-category-tag">${book.category}</span>
-            <span class="cover-spine">${book.title}</span>
-          </div>
-          <div class="book-body">
-            <span class="badge ${book.status === 'available' ? 'badge--available' : 'badge--borrowed'}">
-              ${book.status === 'available' ? 'Available' : 'Borrowed'}
-            </span>
-            <h3 class="book-title">${book.title}</h3>
-            <p class="book-author">by ${book.author}</p>
-            <p class="book-meta">Call No. ${book.callNo}</p>
-          </div>
-          <div class="book-actions">
-            ${book.status === 'available' 
-              ? `<button type="button" class="btn btn--primary" onclick="handleBorrow('${book.id}')">Borrow</button>`
-              : `<button type="button" class="btn btn--secondary" onclick="handleReserve('${book.id}')">Reserve</button>`
-            }
-            <button type="button" class="btn btn--ghost" onclick="openModal('${book.id}')">Details</button>
-          </div>
-        `;
-        grid.appendChild(article);
-      });
-
-      updateCategoryCounts();
-    }
-
-    function updateCategoryCounts() {
-      const counts = {
-        All: books.length,
-        Fiction: books.filter(b => b.category === "Fiction").length,
-        Science: books.filter(b => b.category === "Science").length,
-        History: books.filter(b => b.category === "History").length,
-        Poetry: books.filter(b => b.category === "Poetry").length
-      };
-
-      for (const [cat, count] of Object.entries(counts)) {
-        const el = document.getElementById(`count${cat}`);
-        if (el) el.textContent = count;
-      }
-    }
-
-    // Category click listener
-    document.getElementById('categoryFilterList').addEventListener('click', (e) => {
-      const chip = e.target.closest('.filter-chip');
-      if (!chip) return;
-
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
-      chip.classList.add('is-active');
-
-      selectedCategory = chip.dataset.category;
-      renderCatalog();
-    });
-
-    // Search bar input listener
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      searchQuery = e.target.value.trim();
-      renderCatalog();
-    });
-
-    // Borrow action handler
-    function handleBorrow(id) {
-      const book = books.find(b => b.id === id);
-      if (book && book.status === 'available') {
-        book.status = 'borrowed';
-        showToast('Success!', `You have checked out "${book.title}". Please pick it up at the desk.`);
-        renderCatalog();
-      }
-    }
-
-    // Reserve action handler
-    function handleReserve(id) {
-      const book = books.find(b => b.id === id);
-      if (book) {
-        showToast('Reserved!', `A hold has been placed for "${book.title}". We will notify you when available.`);
-      }
-    }
-
-    // Modal view handlers
-    function openModal(id) {
-      const book = books.find(b => b.id === id);
-      if (!book) return;
-
-      document.getElementById('modalTitle').textContent = book.title;
-      document.getElementById('modalAuthor').textContent = book.author;
-      document.getElementById('modalCategory').textContent = book.category;
-      document.getElementById('modalCallNo').textContent = book.callNo;
-      document.getElementById('modalDescription').textContent = book.description;
-
-      const badge = document.getElementById('modalBadge');
-      badge.textContent = book.status === 'available' ? 'Available' : 'Borrowed';
-      badge.className = `badge ${book.status === 'available' ? 'badge--available' : 'badge--borrowed'}`;
-
-      const modalActions = document.getElementById('modalActions');
-      modalActions.innerHTML = book.status === 'available'
-        ? `<button type="button" class="btn btn--primary" onclick="handleBorrow('${book.id}'); closeModal();">Borrow Now</button>`
-        : `<button type="button" class="btn btn--secondary" onclick="handleReserve('${book.id}'); closeModal();">Place Reserve Hold</button>`;
-
-      document.getElementById('detailModal').classList.add('is-visible');
-    }
-
-    function closeModal() {
-      document.getElementById('detailModal').classList.remove('is-visible');
-    }
-
-    // Close modal when clicking backdrop
-    document.getElementById('detailModal').addEventListener('click', (e) => {
-      if (e.target.id === 'detailModal') closeModal();
-    });
-
-    // Toast notifications helper
-    function showToast(title, message) {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerHTML = `
-        <div>
-          <strong>${title}</strong>
-          <div>${message}</div>
-        </div>
-      `;
-      container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 300ms ease';
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    // Initialize component on load
-    window.addEventListener('DOMContentLoaded', () => {
-      renderCatalog();
-    });
-  </script>
 </body>
 </html>
